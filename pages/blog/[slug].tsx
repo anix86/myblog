@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 const blogPosts: Record<string, { title: string, date: string, content: string }> = {
   'how-i-built-my-portfolio': {
@@ -28,13 +29,20 @@ const blogPosts: Record<string, { title: string, date: string, content: string }
   },
 }
 
-export default function BlogPost() {
-  const router = useRouter()
-  const { slug } = router.query
-  const post = slug && blogPosts[slug as string]
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = Object.keys(blogPosts).map(slug => ({ params: { slug } }))
+  return { paths, fallback: false }
+}
 
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const slug = params?.slug as string
+  const post = blogPosts[slug]
+  return { props: { post } }
+}
+
+export default function BlogPost({ post }: { post: { title: string, date: string, content: string } }) {
   if (!post) {
-    return <div>Loading...</div>
+    return <div>Post not found.</div>
   }
 
   return (
