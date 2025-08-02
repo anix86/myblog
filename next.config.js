@@ -5,4 +5,7 @@ module.exports = {
   output: 'export',
   basePath: isProd ? '/myblog' : '',
   assetPrefix: isProd ? '/myblog/' : '',
+  images: {
+    unoptimized: true,
+  },
 }
