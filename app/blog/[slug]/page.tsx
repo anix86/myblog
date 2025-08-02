@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 const blogPosts: Record<string, { title: string, date: string, content: string }> = {
   'how-i-built-my-portfolio': {
@@ -32,33 +33,40 @@ export async function generateStaticParams() {
   return Object.keys(blogPosts).map(slug => ({ slug }))
 }
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const post = blogPosts[params.slug]
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const post = blogPosts[slug]
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    }
+  }
+  
+  return {
+    title: post.title,
+    description: post.content.substring(0, 160) + '...',
+    openGraph: {
+      title: post.title,
+      description: post.content.substring(0, 160) + '...',
+      type: 'article',
+      publishedTime: post.date,
+      authors: ['Anix86'],
+    },
+  }
+}
+
+export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = blogPosts[slug]
   if (!post) {
     notFound()
   }
   return (
-    <div className="container">
+    <div className="blog-post-container">
       <h1>{post.title}</h1>
-      <span className="date">{post.date}</span>
-      <div className="content">{post.content}</div>
-      <style jsx>{`
-        .container {
-          max-width: 700px;
-          margin: 2rem auto;
-          padding: 1rem;
-        }
-        .date {
-          color: #aaa;
-          font-size: 0.9em;
-          margin-bottom: 1rem;
-          display: block;
-        }
-        .content {
-          margin-top: 2rem;
-          font-size: 1.2em;
-        }
-      `}</style>
+      <span className="blog-post-date">{post.date}</span>
+      <div className="blog-post-content">{post.content}</div>
     </div>
   )
 }

@@ -1,3 +1,5 @@
+"use client"
+
 const projects = [
   {
     name: 'Project Alpha',

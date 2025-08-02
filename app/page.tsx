@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -44,7 +45,7 @@ const projects = [
 
 export default function Home() {
   return (
-    <div>
+    <div className="container">
       <section className="hero">
         <div className="hero-image">
           <Image src="/me.jpg" alt="My photo" width={120} height={120} className="profile-img" />
@@ -52,7 +53,7 @@ export default function Home() {
         <div className="hero-details">
           <h1>Anix86</h1>
           <p>
-            Hi, I’m Anix! A passionate developer specializing in web technologies. I love building beautiful and fast web applications, writing about tech, and sharing my projects with the world.
+            Hi, I'm Anix! A passionate developer specializing in web technologies. I love building beautiful and fast web applications, writing about tech, and sharing my projects with the world.
           </p>
         </div>
       </section>
@@ -81,22 +82,42 @@ export default function Home() {
         &copy; {new Date().getFullYear()} Anix86. All rights reserved.
       </footer>
       <style jsx>{`
+        .container {
+          max-width: 700px;
+          margin: 0 auto;
+          padding: 1rem;
+        }
         .hero {
           display: flex;
           align-items: center;
-          padding: 2rem 1rem;
+          padding: 2rem 0;
+          margin-bottom: 2rem;
+          border-bottom: 1px solid #eee;
         }
         .hero-image {
           margin-right: 2rem;
+          flex-shrink: 0;
         }
         .profile-img {
           border-radius: 50%;
+          display: block;
         }
         .hero-details {
-          max-width: 500px;
+          flex: 1;
+        }
+        .hero-details h1 {
+          margin-top: 0;
+          margin-bottom: 1rem;
+        }
+        .hero-details p {
+          line-height: 1.6;
+          color: #555;
         }
         .section {
-          margin: 2rem 1rem;
+          margin: 2rem 0;
+        }
+        .section h2 {
+          margin-bottom: 1rem;
         }
         .date {
           color: #aaa;
@@ -112,10 +133,21 @@ export default function Home() {
         .footer {
           text-align: center;
           padding: 2rem 0 1rem 0;
-          font-size: 1em;
+          font-size: 0.9em;
           color: #666;
           border-top: 1px solid #eee;
           margin-top: 3rem;
+        }
+        
+        @media (max-width: 600px) {
+          .hero {
+            flex-direction: column;
+            text-align: center;
+          }
+          .hero-image {
+            margin-right: 0;
+            margin-bottom: 1rem;
+          }
         }
       `}</style>
     </div>
